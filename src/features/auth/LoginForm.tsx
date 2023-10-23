@@ -7,7 +7,7 @@ import { Button } from "~/features/ui";
 
 export function LoginForm() {
   return (
-    <div className="w-full max-w-md px-8">
+    <div className="w-full max-w-md ">
       <Form<z.infer<typeof authSchema>> schema={authSchema}>
         {({}) => (
           <div className="flex w-full flex-col gap-4">

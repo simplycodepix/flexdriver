@@ -1,4 +1,4 @@
-import Head from "next/head";
+import { AppLayout } from "~/features/layout/AppLayout";
 
 import { LoginForm } from "~/features/auth";
 
@@ -6,15 +6,8 @@ import { api } from "~/utils/api";
 
 export default function Login() {
   return (
-    <>
-      <Head>
-        <title>Login</title>
-        <meta name="description" content="Login" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900">
-        <LoginForm />
-      </main>
-    </>
+    <AppLayout pageTitle="Login" pageDescription="Login">
+      <LoginForm />
+    </AppLayout>
   );
 }

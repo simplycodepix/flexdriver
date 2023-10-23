@@ -41,7 +41,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ["px-3 py-1.5 text-xs"]: size === "sm",
             ["h-10 px-4 py-2 text-sm"]: size === "md",
             ["px-4 py-2.5 text-base"]: size === "lg",
-            ["border-primary bg-primary hover:border-blue-700 hover:bg-blue-700 focus:ring-2"]:
+            ["border-gray-800 bg-gray-800 hover:border-blue-700 hover:bg-blue-700 focus:ring-2"]:
               !disabled,
             ["bg-gray-200"]: disabled,
           },
