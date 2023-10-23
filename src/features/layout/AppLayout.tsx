@@ -1,10 +1,12 @@
 import Head from "next/head";
+import Link from "next/link";
+import clsx from "classnames";
 
 import { Button, Tile } from "~/features/ui";
-import { FormLabel } from "../ui/form";
-import Link from "next/link";
+import { FormLabel } from "~/features/ui/form";
 
 export function AppLayout(props: {
+  className?: string;
   pageTitle: string;
   pageDescription: string;
   children: React.ReactNode;
@@ -16,7 +18,21 @@ export function AppLayout(props: {
         <meta name="description" content={props.pageDescription} />
       </Head>
 
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 px-8 py-4 text-slate-50">
+      <header className="fixed left-0 right-0 top-0 flex w-full justify-center py-4 ">
+        <div className="text-center">
+          <Link href="/" className="text-lg font-black text-white">
+            <span>MaxGonnaBeRich</span>
+          </Link>
+          <p className="text-sm text-gray-500">bestmail@gmail.com</p>
+        </div>
+      </header>
+
+      <main
+        className={clsx(
+          "flex min-h-screen flex-col items-center justify-center bg-slate-900 px-8 py-4 text-slate-50",
+          props.className,
+        )}
+      >
         {props.children}
 
         <div className="mt-8 flex w-full flex-col gap-6">
