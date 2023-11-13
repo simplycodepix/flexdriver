@@ -5,12 +5,20 @@ import { useController, useFormContext } from "react-hook-form";
 import type { Noop } from "react-hook-form";
 
 type Size = "sm" | "md" | "lg";
+type Color =
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "success"
+  | "warning"
+  | "transparent";
 
 export type Props = {
   name: string;
   value?: string;
   size?: Size;
   optional?: boolean;
+  color?: Color;
   error?: boolean | string;
   border?: boolean;
   disabled?: boolean;
@@ -35,6 +43,7 @@ export const Input = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     border = true,
     inputStyles,
     value = "",
+    color = "primary",
     size = "md",
     type,
     inputRef,
@@ -55,12 +64,14 @@ export const Input = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     <div
       ref={ref}
       className={clsx(
-        "relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm",
+        "relative w-full cursor-default overflow-hidden rounded-lg text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm",
         {
           border: border,
           "border-0 outline-none": !border,
           "border-red-400": error,
           "cursor-not-allowed border-gray-200": disabled,
+          "bg-transparent": color === "transparent",
+          "bg-white": color === "primary",
         },
         className,
       )}

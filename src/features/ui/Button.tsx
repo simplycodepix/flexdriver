@@ -1,9 +1,8 @@
 import React from "react";
 import clsx from "classnames";
 
-export type ButtonVariant = "primary" | "secondary" | "outlined" | "text";
 export type ButtonSize = "xs" | "sm" | "md" | "lg";
-export type ButtonColor = "default" | "success" | "warning" | "danger";
+export type ButtonColor = "primary" | "secondary" | "warning" | "danger";
 
 export type ButtonProps = {
   className?: string;
@@ -11,7 +10,6 @@ export type ButtonProps = {
   id?: string;
   to?: string;
   disabled?: boolean;
-  variant?: ButtonVariant;
   size?: ButtonSize;
   color?: ButtonColor;
   startAdornment?: React.ReactNode | string | null;
@@ -29,6 +27,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       startAdornment,
       endAdornment,
       disabled,
+      color = "primary",
       ...rest
     } = props;
 
@@ -41,8 +40,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ["px-3 py-1.5 text-xs"]: size === "sm",
             ["h-10 px-4 py-2 text-sm"]: size === "md",
             ["px-4 py-2.5 text-base"]: size === "lg",
-            ["border-gray-800 bg-gray-800 hover:border-blue-700 hover:bg-blue-700 focus:ring-2"]:
-              !disabled,
+            ["focus:ring-2"]: !disabled,
+            ["border-blue-700 bg-blue-700 hover:border-blue-800 hover:bg-blue-800"]:
+              !disabled && color === "primary",
+            ["border-gray-600 bg-gray-600 hover:border-blue-700 hover:bg-blue-700"]:
+              !disabled && color === "secondary",
             ["bg-gray-200"]: disabled,
           },
           className,

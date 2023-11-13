@@ -1,11 +1,16 @@
 import clsx from "classnames";
 
 export type MenuProps = {
+  className?: string;
   children: React.ReactNode;
 };
 
 export function Menu(props: MenuProps) {
-  return <div className="flex w-full flex-col gap-4">{props.children}</div>;
+  return (
+    <div className={clsx("flex w-full flex-col gap-4", props.className)}>
+      {props.children}
+    </div>
+  );
 }
 
 export type MenuButtonProps = {
