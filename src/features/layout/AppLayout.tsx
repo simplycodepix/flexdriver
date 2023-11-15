@@ -5,12 +5,20 @@ import clsx from "classnames";
 import { Button, Tile } from "~/features/ui";
 import { FormLabel } from "~/features/ui/form";
 
+import { NotificationsModal } from "~/features/notifications";
+import { useNotificationsUI } from "~/features/notifications/notifications.store";
+import { FiBell } from "react-icons/fi";
+
 export function AppLayout(props: {
   className?: string;
   pageTitle: string;
   pageDescription: string;
   children: React.ReactNode;
 }) {
+  const setNotificationsModalOpen = useNotificationsUI(
+    (state) => state.setModalOpen,
+  );
+
   return (
     <>
       <Head>
@@ -25,6 +33,14 @@ export function AppLayout(props: {
           </Link>
           <p className="text-sm text-gray-500">bestmail@gmail.com</p>
         </div>
+        <Button
+          size="md"
+          color="secondary"
+          className="absolute right-4 h-8 w-8"
+          onClick={() => setNotificationsModalOpen(true)}
+        >
+          <FiBell />
+        </Button>
       </header>
 
       <main
@@ -84,6 +100,8 @@ export function AppLayout(props: {
           </div>
         </div>
       </main>
+
+      <NotificationsModal />
     </>
   );
 }

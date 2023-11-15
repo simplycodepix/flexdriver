@@ -10,7 +10,11 @@ import {
 
 import { AppLayout } from "~/features/layout/AppLayout";
 
-import { ScheduleSettingsModal, TimerToggle } from "~/features/schedule";
+import {
+  ScheduleSettingsModal,
+  ScheduledBlocksModal,
+  TimerToggle,
+} from "~/features/schedule";
 import { useScheduleUI } from "~/features/schedule/schedule.store";
 
 import { FilterSettingsModal } from "~/features/filters";
@@ -34,6 +38,7 @@ export default function Home() {
       <ScheduleSettingsModal />
       <FilterSettingsModal />
       <LogsModal />
+      <ScheduledBlocksModal />
     </AppLayout>
   );
 }
@@ -64,6 +69,9 @@ function HomeMenu() {
   const setScheduleSettingsModalOpen = useScheduleUI(
     (state) => state.setSettingsModalOpen,
   );
+  const setScheduledBlocksModalOpen = useScheduleUI(
+    (state) => state.setScheduledBlocksModalOpen,
+  );
   const setFiltersSettingsModalOpen = useFiltersUI(
     (state) => state.setSettingsModalOpen,
   );
@@ -78,7 +86,7 @@ function HomeMenu() {
       case "station_filters":
         return setFiltersSettingsModalOpen(true);
       case "scheduled_blocks":
-        return;
+        return setScheduledBlocksModalOpen(true);
       case "logs":
         return setLogHistoryModalOpen(true);
       case "profile":
