@@ -49,6 +49,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           },
           className,
         )}
+        type="button"
         {...rest}
       >
         <div className={"flex items-center"}>

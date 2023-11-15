@@ -4,6 +4,7 @@ import {
   FiChevronRight,
   FiClock,
   FiFilter,
+  FiList,
   FiUser,
 } from "react-icons/fi";
 
@@ -14,6 +15,9 @@ import { useScheduleUI } from "~/features/schedule/schedule.store";
 
 import { FilterSettingsModal } from "~/features/filters";
 import { useFiltersUI } from "~/features/filters/filters.store";
+
+import { LogsModal } from "~/features/logs";
+import { useLogsUI } from "~/features/logs/logs.store";
 
 import { Menu, MenuButton } from "~/features/ui";
 
@@ -29,6 +33,7 @@ export default function Home() {
 
       <ScheduleSettingsModal />
       <FilterSettingsModal />
+      <LogsModal />
     </AppLayout>
   );
 }
@@ -45,6 +50,11 @@ const menuButtons = [
     icon: <FiCalendar />,
     text: "Scheduled Blocks",
   },
+  {
+    id: "logs",
+    icon: <FiList />,
+    text: "Logs",
+  },
   { id: "profile", icon: <FiUser />, text: "Profile" },
 ];
 
@@ -57,6 +67,9 @@ function HomeMenu() {
   const setFiltersSettingsModalOpen = useFiltersUI(
     (state) => state.setSettingsModalOpen,
   );
+  const setLogHistoryModalOpen = useLogsUI(
+    (state) => state.setHistoryModalOpen,
+  );
 
   const clickHandler = (id: string) => {
     switch (id) {
@@ -66,6 +79,8 @@ function HomeMenu() {
         return setFiltersSettingsModalOpen(true);
       case "scheduled_blocks":
         return;
+      case "logs":
+        return setLogHistoryModalOpen(true);
       case "profile":
         return router.push("/profile");
     }
