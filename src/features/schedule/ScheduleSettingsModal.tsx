@@ -38,7 +38,7 @@ export function ScheduleSettingsModal() {
                 <input
                   id="start-time"
                   type="time"
-                  className="rounded-md bg-slate-800 p-2 text-white"
+                  className="w-full rounded-md bg-slate-800 p-2 text-white"
                 />
               </div>
 
@@ -47,7 +47,7 @@ export function ScheduleSettingsModal() {
                 <input
                   id="end-time"
                   type="time"
-                  className="rounded-md bg-slate-800 p-2 text-white"
+                  className="w-full rounded-md bg-slate-800 p-2 text-white"
                 />
               </div>
 

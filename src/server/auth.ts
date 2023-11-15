@@ -48,21 +48,21 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db),
   providers: [
-    CredentialsProvider({
-      credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-        },
-      },
-      authorize(credentials, req) {
-        //
-      },
-    }),
+    // CredentialsProvider({
+    //   credentials: {
+    //     email: {
+    //       label: "Email",
+    //       type: "text",
+    //     },
+    //     password: {
+    //       label: "Password",
+    //       type: "password",
+    //     },
+    //   },
+    //   authorize(credentials, req) {
+    //     //
+    //   },
+    // }),
   ],
 };
 

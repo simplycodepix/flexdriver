@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import {
   FiCalendar,
   FiChevronRight,
@@ -15,12 +16,11 @@ import { FilterSettingsModal } from "~/features/filters";
 import { useFiltersUI } from "~/features/filters/filters.store";
 
 import { Menu, MenuButton } from "~/features/ui";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
   return (
     <AppLayout pageTitle="Profile" pageDescription="Profile">
-      <div className="flex w-full grow flex-col justify-between pb-12 pt-4">
+      <div className="flex w-full grow flex-col justify-between pb-12">
         <TimerToggle />
         <div className="mt-20">
           <HomeMenu />

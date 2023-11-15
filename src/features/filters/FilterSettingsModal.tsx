@@ -40,7 +40,7 @@ function StationFiltersPanel() {
   );
 
   return (
-    <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-slate-900 p-4 text-white">
+    <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-stone-900 p-4 text-white">
       <Dialog.Title className="mb-12 mr-auto flex items-center justify-between text-xl font-bold">
         Filter Settings
         <Button
@@ -63,7 +63,7 @@ function StationFiltersPanel() {
           {filters.map((filter) => (
             <MenuButton
               key={filter.id}
-              className="w-full bg-slate-800 text-left  hover:bg-slate-700"
+              className="w-full bg-slate-800 text-left hover:bg-slate-700"
               startAdornment={<FiCompass />}
               endAdornment={
                 <div className="flex items-center gap-1">
@@ -97,7 +97,7 @@ function StationFilterSettingsPanel(props: { filterId: string }) {
   const setStationFilterId = useFiltersUI((state) => state.setStationFilterId);
 
   return (
-    <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-slate-900 p-4 text-white">
+    <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-stone-900 p-4 text-white">
       <Dialog.Title className="mb-12 mr-auto flex items-center justify-between text-xl font-bold">
         Station Filters
         <Button

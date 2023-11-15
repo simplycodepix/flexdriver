@@ -1,13 +1,15 @@
 import { z } from "zod";
-import { Tile } from "~/features/ui";
 
 import {
   Form,
-  FormCheckbox,
   FormGroup,
   FormInput,
   FormRange,
+  FormSwitch,
+  FormToggleButtonGroup,
 } from "~/features/ui/form";
+
+import { Tile } from "~/features/ui";
 
 const filterSchema = z.object({
   active: z.boolean(),
@@ -22,7 +24,7 @@ export function StationFilterSettings() {
         const active = watch("active");
         return (
           <div className="flex flex-col gap-8">
-            <Tile endAdornment={<FormCheckbox name="active" />}>
+            <Tile endAdornment={<FormSwitch name="active" />}>
               <div className="text-base">Filter Status</div>
               <span className="text-sm text-gray-500">
                 Filter is {active ? "On" : "Off"}
@@ -41,7 +43,24 @@ export function StationFilterSettings() {
               </Tile>
             </FormGroup>
 
-            <FormGroup label="Block Filter">
+            <FormGroup label="Days of the week">
+              <FormToggleButtonGroup
+                label="Select days of the week that this filter should affect"
+                name="days_of_week"
+                buttonStyles="w-14"
+                options={[
+                  { label: "Mon", value: "monday" },
+                  { label: "Tue", value: "tuesday" },
+                  { label: "Wed", value: "wednesday" },
+                  { label: "Thu", value: "thursday" },
+                  { label: "Fri", value: "friday" },
+                  { label: "Sat", value: "saturday" },
+                  { label: "Sun", value: "sunday" },
+                ]}
+              />
+            </FormGroup>
+
+            <FormGroup className="flex flex-col gap-1" label="Block Filter">
               <Tile
                 className="flex-wrap"
                 startAdornmentStyles="w-full"
@@ -94,11 +113,22 @@ export function StationFilterSettings() {
               </Tile>
             </FormGroup>
 
-            <FormGroup label="Stations (0)">
-              <Tile endAdornment={<FormCheckbox name="display_full_name" />}>
-                <div className="text-base">Display full name</div>
-              </Tile>
-            </FormGroup>
+            <div className="flex flex-col gap-4">
+              <FormGroup label="Stations (0)">
+                <Tile endAdornment={<FormSwitch name="display_full_name" />}>
+                  <div className="text-base">Display full name</div>
+                </Tile>
+              </FormGroup>
+              <FormToggleButtonGroup
+                label="Select stations that this filter should affect"
+                name="stations"
+                options={[
+                  { label: "test", value: "test" },
+                  { label: "test2", value: "test2" },
+                  { label: "test3", value: "test3" },
+                ]}
+              />
+            </div>
           </div>
         );
       }}
