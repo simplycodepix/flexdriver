@@ -1,14 +1,16 @@
 import type { z } from "zod";
 
-import { authSchema } from "~/shared/schemas/auth";
+import { type AuthInput, authSchema } from "~/server/schemas/auth";
 
 import { Form, FormControl, FormInput } from "~/features/ui/form";
 import { Button } from "~/features/ui";
 
-export function LoginForm() {
+export function LoginForm(props: {
+  onSubmit: (data: AuthInput) => void | Promise<void>;
+}) {
   return (
     <div className="w-full max-w-md ">
-      <Form<z.infer<typeof authSchema>> schema={authSchema}>
+      <Form<AuthInput> schema={authSchema} onSubmit={props.onSubmit}>
         {({}) => (
           <div className="flex w-full flex-col gap-4">
             <FormControl fullWidth label="Flex Email">

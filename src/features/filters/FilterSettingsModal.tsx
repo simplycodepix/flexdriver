@@ -7,37 +7,29 @@ import {
 } from "react-icons/fi";
 import { Dialog } from "@headlessui/react";
 
+import { api } from "~/utils/api";
+
 import { Button, Menu, MenuButton } from "~/features/ui";
 
 import { useFiltersUI } from "./filters.store";
 import { StationFilterSettings } from "./StationFilterSettings";
-
-const filters = [
-  {
-    id: "123",
-    name: "All days",
-    active: true,
-    days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  },
-  {
-    id: "456",
-    name: "Weekdays",
-    active: false,
-    days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-  },
-  {
-    id: "789",
-    name: "Weekends",
-    active: false,
-    days: ["Sat", "Sun"],
-  },
-];
 
 function StationFiltersPanel() {
   const setStationFilterId = useFiltersUI((state) => state.setStationFilterId);
   const setSettingsModalOpen = useFiltersUI(
     (state) => state.setSettingsModalOpen,
   );
+
+  const { data: stationFilters } = api.user.getStationFilters.useQuery(
+    undefined,
+    {},
+  );
+  const { mutate: createStationFilter } =
+    api.filters.createStationFilter.useMutation({
+      onSuccess: (data) => {
+        setStationFilterId(data.id);
+      },
+    });
 
   return (
     <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-stone-900 p-4 text-white">
@@ -60,7 +52,7 @@ function StationFiltersPanel() {
         </div>
 
         <Menu className="gap-1">
-          {filters.map((filter) => (
+          {stationFilters?.map((filter) => (
             <MenuButton
               key={filter.id}
               className="w-full bg-slate-800 text-left hover:bg-slate-700"
@@ -75,15 +67,23 @@ function StationFiltersPanel() {
               }
               onClick={() => setStationFilterId(filter.id)}
             >
-              <span className="text-sm text-white">{filter.name}</span>
+              <span className="text-sm text-white">
+                {filter.name || "Default"}
+              </span>
               <span className="mt-1 block text-xs font-normal text-gray-400">
-                {filter.days.join(", ")}
+                {filter.daysOfWeek.join(", ")}
               </span>
             </MenuButton>
           ))}
+
           <MenuButton
             className="h-12 w-full bg-slate-800 text-left text-sm text-green-400 hover:bg-slate-700"
             startAdornment={<FiPlus />}
+            onClick={() => {
+              createStationFilter({
+                name: "Example" + stationFilters?.length + 1,
+              });
+            }}
           >
             Add Station Filter
           </MenuButton>
@@ -96,21 +96,18 @@ function StationFiltersPanel() {
 function StationFilterSettingsPanel(props: { filterId: string }) {
   const setStationFilterId = useFiltersUI((state) => state.setStationFilterId);
 
+  const close = () => setStationFilterId(null);
+
   return (
     <Dialog.Panel className="mx-auto w-full max-w-sm flex-grow rounded bg-stone-900 p-4 text-white">
       <Dialog.Title className="mb-12 mr-auto flex items-center justify-between text-xl font-bold">
         Station Filters
-        <Button
-          size="md"
-          color="secondary"
-          className="h-8 w-8"
-          onClick={() => setStationFilterId(null)}
-        >
+        <Button size="md" color="secondary" className="h-8 w-8" onClick={close}>
           <FiX />
         </Button>
       </Dialog.Title>
 
-      <StationFilterSettings />
+      <StationFilterSettings filterId={props.filterId} onClose={close} />
     </Dialog.Panel>
   );
 }

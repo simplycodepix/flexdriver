@@ -8,6 +8,8 @@ import {
   FiUser,
 } from "react-icons/fi";
 
+import { getProtectedServerSideProps } from "~/server/auth";
+
 import { AppLayout } from "~/features/layout/AppLayout";
 
 import {
@@ -110,3 +112,5 @@ function HomeMenu() {
     </Menu>
   );
 }
+
+export const getServerSideProps = getProtectedServerSideProps;

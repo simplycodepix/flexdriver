@@ -1,6 +1,6 @@
 import type { z } from "zod";
 
-import { authSchema } from "~/shared/schemas/auth";
+import { authSchema } from "~/server/schemas/auth";
 
 import { Form, FormControl, FormInput } from "~/features/ui/form";
 import { Button } from "~/features/ui";

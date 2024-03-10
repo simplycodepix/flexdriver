@@ -45,6 +45,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               !disabled && color === "primary",
             ["border-gray-600 bg-gray-600 hover:border-blue-700 hover:bg-blue-700"]:
               !disabled && color === "secondary",
+            ["border-red-800 bg-red-800 hover:border-red-900 hover:bg-red-900"]:
+              !disabled && color === "danger",
             ["bg-gray-200"]: disabled,
           },
           className,

@@ -1,4 +1,13 @@
-import { z } from "zod";
+import debounce from "lodash.debounce";
+import { useMemo } from "react";
+import { ScheduleDays } from "@prisma/client";
+
+import { api } from "~/utils/api";
+
+import {
+  updateStationFilterSchema,
+  type UpdateStationFilterInput,
+} from "~/server/schemas/filters";
 
 import {
   Form,
@@ -9,17 +18,47 @@ import {
   FormToggleButtonGroup,
 } from "~/features/ui/form";
 
-import { Tile } from "~/features/ui";
+import { Button, Tile } from "~/features/ui";
+import { FiTrash } from "react-icons/fi";
 
-const filterSchema = z.object({
-  active: z.boolean(),
-});
+export function StationFilterSettings(props: {
+  filterId: string;
+  onClose?: () => void;
+}) {
+  const { filterId, onClose } = props;
 
-type FormValues = z.infer<typeof filterSchema>;
+  const { data: stationFilter } = api.filters.getStationFilter.useQuery(
+    { id: filterId },
+    {},
+  );
 
-export function StationFilterSettings() {
+  const { mutate: deleteStationFilter } =
+    api.filters.deleteStationFilter.useMutation({
+      onSuccess: () => {
+        onClose && onClose();
+      },
+    });
+
+  const { mutate: updateStationFilter } =
+    api.filters.updateStationFilter.useMutation({});
+
+  const debouncedUpdateStationFilter = useMemo(
+    () =>
+      debounce((data: Partial<UpdateStationFilterInput>) => {
+        if (!data?.id) return;
+        updateStationFilter({ ...data, id: data.id });
+      }, 500),
+    [updateStationFilter],
+  );
+
   return (
-    <Form<FormValues> schema={filterSchema}>
+    <Form<UpdateStationFilterInput>
+      schema={updateStationFilterSchema}
+      // defaultValues={stationFilter ?? undefined}
+      onChange={(data) => {
+        debouncedUpdateStationFilter(data as UpdateStationFilterInput);
+      }}
+    >
       {({ watch }) => {
         const active = watch("active");
         return (
@@ -49,13 +88,13 @@ export function StationFilterSettings() {
                 name="days_of_week"
                 buttonStyles="w-14"
                 options={[
-                  { label: "Mon", value: "monday" },
-                  { label: "Tue", value: "tuesday" },
-                  { label: "Wed", value: "wednesday" },
-                  { label: "Thu", value: "thursday" },
-                  { label: "Fri", value: "friday" },
-                  { label: "Sat", value: "saturday" },
-                  { label: "Sun", value: "sunday" },
+                  { label: "Mon", value: ScheduleDays.Monday },
+                  { label: "Tue", value: ScheduleDays.Tuesday },
+                  { label: "Wed", value: ScheduleDays.Wednesday },
+                  { label: "Thu", value: ScheduleDays.Thursday },
+                  { label: "Fri", value: ScheduleDays.Friday },
+                  { label: "Sat", value: ScheduleDays.Saturday },
+                  { label: "Sun", value: ScheduleDays.Sunday },
                 ]}
               />
             </FormGroup>
@@ -129,6 +168,19 @@ export function StationFilterSettings() {
                 ]}
               />
             </div>
+
+            <Button
+              type="button"
+              color="danger"
+              className="h-12 w-full bg-slate-800 text-left text-sm text-green-400 hover:bg-slate-700"
+              startAdornment={<FiTrash />}
+              onClick={(e) => {
+                e.preventDefault();
+                deleteStationFilter({ id: filterId });
+              }}
+            >
+              Delete Filter
+            </Button>
           </div>
         );
       }}

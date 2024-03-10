@@ -4,3 +4,5 @@ export const authSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
+
+export type AuthInput = z.infer<typeof authSchema>;

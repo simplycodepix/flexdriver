@@ -1,26 +1,20 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
+enum ScheduleDays {
+    Monday
+    Tuesday
+    Wednesday
+    Thursday
+    Friday
+    Saturday
+    Sunday
 }
 
 // Necessary for Next auth
@@ -51,13 +45,19 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+    id              String             @id @default(cuid())
+    name            String?
+    email           String             @unique
+    emailVerified   DateTime?
+    password        String
+    image           String?
+    accounts        Account[]
+    sessions        Session[]
+    createdAt       DateTime           @default(now())
+    updatedAt       DateTime           @updatedAt
+    stationFilters  StationFilter[]
+    scheduledBlocks ScheduledBlock[]
+    notifications   NotificationItem[]
 }
 
 model VerificationToken {
@@ -66,4 +66,54 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model StationFilter {
+    id                 String         @id @default(cuid())
+    active             Boolean        @default(false)
+    name               String
+    minPricePerBlock   Int?
+    minHours           Int?
+    maxHours           Int?
+    timeNeededToArrive Int?
+    hourlyRate         Int?
+    dateFrom           DateTime?
+    dateTo             DateTime?
+    stations           String[]
+    createdAt          DateTime       @default(now())
+    updatedAt          DateTime       @updatedAt
+    daysOfWeek         ScheduleDays[]
+    userId             String
+    user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    scheduledBlocks ScheduledBlock[]
+
+    @@unique([userId, name])
+}
+
+model ScheduledBlock {
+    id              String         @id @default(cuid())
+    active          Boolean        @default(false)
+    match           Boolean        @default(false)
+    missed          Boolean        @default(false)
+    dateFrom        DateTime?
+    dateTo          DateTime?
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @updatedAt
+    userId          String
+    user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    stationFilterId String?
+    stationFilter   StationFilter? @relation(fields: [stationFilterId], references: [id], onDelete: SetNull)
+}
+
+model NotificationItem {
+    id        String   @id @default(cuid())
+    type      String
+    title     String
+    message   String
+    read      Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

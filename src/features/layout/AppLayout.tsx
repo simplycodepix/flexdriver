@@ -1,13 +1,24 @@
 import Head from "next/head";
 import Link from "next/link";
 import clsx from "classnames";
+import { FiBell } from "react-icons/fi";
+import { signOut, useSession } from "next-auth/react";
+
+import { api } from "~/utils/api";
 
 import { Button, Tile } from "~/features/ui";
 import { FormLabel } from "~/features/ui/form";
 
 import { NotificationsModal } from "~/features/notifications";
 import { useNotificationsUI } from "~/features/notifications/notifications.store";
-import { FiBell } from "react-icons/fi";
+
+const UserEmail = () => {
+  const { data: me } = api.user.getMe.useQuery(undefined, {
+    keepPreviousData: true,
+  });
+
+  return <p className="text-sm text-gray-500">{me?.email}</p>;
+};
 
 export function AppLayout(props: {
   className?: string;
@@ -15,6 +26,8 @@ export function AppLayout(props: {
   pageDescription: string;
   children: React.ReactNode;
 }) {
+  const { status: sessionStatus } = useSession();
+
   const setNotificationsModalOpen = useNotificationsUI(
     (state) => state.setModalOpen,
   );
@@ -29,9 +42,9 @@ export function AppLayout(props: {
       <header className="fixed left-0 right-0 top-0 flex w-full justify-center bg-slate-900 py-4">
         <div className="text-center">
           <Link href="/" className="text-lg font-black text-white">
-            <span>MaxGonnaBeRich</span>
+            <span>FlexAI</span>
           </Link>
-          <p className="text-sm text-gray-500">bestmail@gmail.com</p>
+          {sessionStatus === "authenticated" ? <UserEmail /> : null}
         </div>
         <Button
           size="md"
@@ -75,7 +88,18 @@ export function AppLayout(props: {
             </Tile>
           </div>
 
-          <Button className="w-full">Logout</Button>
+          {sessionStatus === "authenticated" ? (
+            <Button
+              type="button"
+              className="w-full"
+              onClick={(e) => {
+                e.preventDefault();
+                void signOut();
+              }}
+            >
+              Logout
+            </Button>
+          ) : null}
 
           <nav className="text-center text-sm">
             <ul className="flex flex-col gap-4">
